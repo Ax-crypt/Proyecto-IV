@@ -1,0 +1,33 @@
+package pe.edu.cibertec.ProyectoFinalAplWeb1.entity;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.Date;
+
+@Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class User {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    private String username;
+    private String password;
+    private String email;
+    private String firstName;
+    private String lastName;
+    private Integer telephone;
+    private String address;
+    private String role;
+    private Date createdAt;
+    private Date updatedAt;
+
+}

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestión de usuarios</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        h1 {
+            color: rgba(255, 255, 255, 0.63);
+        }
+        /* Aumentar tamaño de texto del navbar */
+        .navbar .navbar-nav .nav-link {
+            font-size: 26px;  /* Aumenta el tamaño del texto de los enlaces */
+            padding-left: 20px;  /* Agrega espacio a la izquierda de cada enlace */
+            padding-right: 20px; /* Agrega espacio a la derecha de cada enlace */
+        }
+
+        /* Aumentar tamaño de la marca del navbar (Gestionar Usuarios) */
+        .navbar .navbar-brand {
+            font-size: 30px;  /* Aumenta el tamaño del texto de la marca */
+        }
+
+        /* Agregar más espacio entre los elementos del navbar */
+        .navbar-nav {
+            margin-left: 10px;  /* Añade espacio en el lado izquierdo */
+            margin-right: 10px; /* Añade espacio en el lado derecho */
+        }
+
+        /* Si se desea mayor separación entre los elementos individuales de la lista */
+        .navbar-nav .nav-item {
+            margin-right: 20px;  /* Espacio entre los elementos de la lista */
+        }
+        .button-right {
+            margin-left: 990px; /* Alinea el botón a la derecha */
+            margin-top: 10px;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .button-right button {
+            border-radius: 30px; /* Botón con bordes redondeados */
+            padding: 8px 20px; /* Añadir padding para hacerlo más grande */
+            font-weight: bold; /* Hacer el texto más notorio */
+        }
+
+        .button-right button:hover {
+            background-color: #0056b3; /* Cambia el color al pasar el cursor */
+            border-color: #004085; /* Cambia el borde al pasar el cursor */
+        }
+        /* Estilos personalizados para el botón de Cerrar sesión */
+        .custom-logout-button {
+            background-color: #dc3545; /* Rojo fuerte */
+            color: white; /* Texto blanco */
+            border: none; /* Eliminar borde por defecto */
+            border-radius: 25px; /* Bordes redondeados */
+            padding: 10px 20px; /* Espaciado dentro del botón */
+            font-weight: bold; /* Hacer el texto más notorio */
+            font-size: 16px; /* Aumentar tamaño de la fuente */
+            transition: background-color 0.3s ease, transform 0.2s ease; /* Efecto de transición */
+        }
+
+        .custom-logout-button:hover {
+            background-color: #c82333; /* Cambio de color de fondo cuando pasa el cursor */
+            transform: scale(1.05); /* Agrandar ligeramente el botón al pasar el cursor */
+        }
+
+        .custom-logout-button i {
+            font-size: 18px; /* Aumentar el tamaño del ícono */
+            margin-right: 8px; /* Separación entre el ícono y el texto */
+        }
+    </style>
+</head>
+<body>
+
+<div class="container-fluid">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <h1><i class="fas fa-user me-2"></i>Gestionar Usuarios</h1>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/disk">
+                            <i class="fa-solid fa-record-vinyl me-2"></i>Discos
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <form th:action="@{/manage/logout}" method="post">
+                            <button type="submit" class="btn btn-danger btn-sm custom-logout-button">
+                                <i class="fas fa-sign-out-alt"></i> Cerrar sesiòn
+                            </button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contenido Principal -->
+    <div class="row mt-3">
+        <div class="col-md-12">
+            <div class="d-flex justify-content-between align-items-center bg-light p-3 rounded shadow-sm border">
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-person-circle fs-5 me-3"></i>
+                    <div class="d-flex flex-column align-items-start">
+                        <span class="btn btn-info mt-2 fs-5" style="pointer-events: none;" th:text="${#authentication.authorities[0].toString().replace('ROLE_', '')}"></span>
+                        <span class="fs-5">Bienvenido, <strong th:text="${#authentication.name}"></strong></span>
+                    </div>
+                    <span class="button-right">
+                        <button type="button" class="btn btn-primary mt-3" onclick="location.href='/manage/add'">
+                            <i class="bi bi-person-plus fs-5 me-2"></i> Agregar usuario
+                        </button>
+                   </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Tabla de usuarios -->
+    <table class="table table-hover table-bordered">
+        <thead class="table-dark">
+        <tr>
+            <th class="text-center">Código</th>
+            <th class="text-center">Nombres</th>
+            <th class="text-center">Apellidos</th>
+            <th class="text-center">Email</th>
+            <th class="text-center">Telèfono</th>
+            <th class="text-center">Direcciòn</th>
+            <th class="text-center">Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.id}"></td>
+            <td th:text="${user.firstName()}"></td>
+            <td th:text="${user.lastName()}"></td>
+            <td th:text="${user.email()}"></td>
+            <td th:text="${user.telephone()}"></td>
+            <td th:text="${user.address()}"></td>
+            <td class="text-center">
+                <a th:href="@{/manage/edit/{id}(id=${user.id})}" class="btn btn-warning btn-sm">
+                    <i class="bi bi-pencil-square me-1"></i> Editar
+                </a>
+                <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                        th:data-bs-target="'#deleteModal_' + ${user.id}">
+                    <i class="bi bi-trash-fill"></i> Eliminar
+                </button>
+                <a class="btn btn-info btn-sm" th:href="@{/manage/detail/{id}(id=${user.id})}">
+                    <i class="fa-solid fa-eye me-1"></i> Detalle
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- Modal de confirmación de eliminación -->
+    <div th:each="user : ${users}"
+         th:id="'deleteModal_' + ${user.id}"
+         class="modal fade" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Confirmación de Eliminación</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    ¿Estás seguro de que deseas eliminar el usuario con el nombre <b th:text="${user.firstName()} + ' ' + ${user.lastName()}"></b>?
+                </div>
+                <div class="modal-footer">
+                    <a th:href="@{/manage/delete/{id}(id=${user.id})}" class="btn btn-danger">
+                        Confirmar
+                    </a>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous">
+</script>
+
+</body>
+</html>
