@@ -14,66 +14,78 @@
         .container {
             margin-top: 50px;
         }
-        .table-container {
-            background-color: #fff;
+        .card {
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            padding: 20px;
         }
-        h1 {
-            color: #495057;
+        .card img {
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+        .card-title {
+            font-family: 'Rockwell', sans-serif;
+        }
+        .navbar-brand {
+            font-family: 'Rockwell', sans-serif;
+            font-size: 1.5rem;
         }
     </style>
 </head>
 <body>
 <div class="container">
-    <div class="table-container">
-        <!-- Título -->
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1><i class="fa-solid fa-record-vinyl me-2"></i>Lista de Discos</h1>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <i class="fa-solid fa-record-vinyl me-2"></i>Vinil O's
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/disk">
+                            <i class="fa-solid fa-record-vinyl me-2"></i>Discos
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <form th:action="@{/manage/logout}" method="post">
+                            <button type="submit" class="btn btn-danger btn-sm">
+                                <i class="fas fa-sign-out-alt"></i> Cerrar sesión
+                            </button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
         </div>
+    </nav>
 
-        <!-- Error -->
-        <div th:if="${error}" class="alert alert-danger" role="alert">
-            <p th:text="${error}"></p>
-        </div>
-
-        <!-- Tabla -->
-        <table class="table table-hover table-bordered">
-            <thead class="table-dark">
-            <tr>
-                <th>Codigo</th>
-                <th>Nombre</th>
-                <th>Artista</th>
-                <th>Género</th>
-                <th>Precio</th>
-                <th>Acciones</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="disco : ${discos}">
-                <td th:text="${disco.id}"></td>
-                <td th:text="${disco.nombre}"></td>
-                <td th:text="${disco.artista}"></td>
-                <td th:text="${disco.genero.nombre}"></td>
-                <td th:text="${disco.precio}"></td>
-                <td>
-                    <a th:href="@{/disk/{id}(id=${disco.id})}" class="btn btn-info btn-sm">
-                        <i class="fa-solid fa-eye me-1"></i>Ver Detalles
+    <!-- Lista de Discos -->
+    <h1 class="mb-4 text-center"><i class="fa-solid fa-record-vinyl me-2"></i>Lista de Discos</h1>
+    <div class="row">
+        <!-- Tarjetas de discos -->
+        <div class="col-md-4 mb-4" th:each="disco : ${discos}">
+            <div class="card">
+                <img src="URL_DE_LA_IMAGEN_DEL_DISCO" class="card-img-top" alt="Portada de Disco">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${disco.nombre}"></h5>
+                    <p class="card-text">
+                        <strong>Artista:</strong> <span th:text="${disco.artista}"></span><br>
+                        <strong>Género:</strong> <span th:text="${disco.genero.nombre}"></span><br>
+                        <strong>Precio:</strong> $<span th:text="${disco.precio}"></span>
+                    </p>
+                    <a th:href="@{/disk/detail/{id}(id=${disco.id})}" class="btn btn-primary">
+                        <i class="fa-solid fa-eye me-1"></i> Ver Detalles
                     </a>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
 </body>
 </html>
-
-

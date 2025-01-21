@@ -30,6 +30,7 @@ public class DiscoController {
             model.addAttribute("discos", discos);
             return "listarDiscos";
         } catch (Exception e) {
+            e.printStackTrace();
             model.addAttribute("error", "Error al obtener la lista de discos.");
             return "error";
         }
@@ -48,6 +49,7 @@ public class DiscoController {
                 return "error";
             }
         } catch (Exception e) {
+            e.printStackTrace();
             model.addAttribute("error", "Error al obtener el detalle del disco.");
             return "error";
         }
@@ -135,6 +137,47 @@ public class DiscoController {
         } catch (Exception e) {
             e.printStackTrace();
             model.addAttribute("error", "Error al eliminar el disco.");
+            return "error";
+        }
+    }
+
+
+   /* /*++++++++++++++++++++++++++++++++++++++++++++/ /*+++++++++++++++++++++++++++++++++++++++++++++++++++/
+                                /*                                   /*
+                                /* metodos para la tienda de discos  /*
+                                /*                                     */
+    /*++++++++++++++++++++++++++++++++++++++++++++++/  /*+++++++++++++++++++++++++++++++++++++++++++++++++++/ */
+
+    // Mostrar lista de discos
+    @GetMapping("/discos")
+    public String lisDiscos(Model model) {
+        try {
+            List<DiscoDto> discos = discosService.getAllDiscos();
+            model.addAttribute("discos", discos);
+            return "storeDiscos";
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("error", "Error al obtener la lista de discos.");
+            return "error";
+        }
+    }
+
+
+    // Método para ver el detalle de un disco
+    @GetMapping("/detail/{id}")
+    public String detalle(@PathVariable("id") int id, Model model) {
+        try {
+            Optional<DiscoDto> disco = discosService.getDiscoById(id);
+            if (disco.isPresent()) {
+                model.addAttribute("disco", disco.get());
+                return "storeDetailsDisk";
+            } else {
+                model.addAttribute("error", "Disco no encontrado.");
+                return "error";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("error", "Error al obtener el detalle del disco.");
             return "error";
         }
     }

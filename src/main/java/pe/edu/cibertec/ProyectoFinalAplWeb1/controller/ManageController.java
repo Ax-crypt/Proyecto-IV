@@ -5,9 +5,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import pe.edu.cibertec.ProyectoFinalAplWeb1.dto.DiscoDto;
 import pe.edu.cibertec.ProyectoFinalAplWeb1.dto.UserCreateDto;
 import pe.edu.cibertec.ProyectoFinalAplWeb1.dto.UserDetailDto;
 import pe.edu.cibertec.ProyectoFinalAplWeb1.dto.UserDto;
+import pe.edu.cibertec.ProyectoFinalAplWeb1.service.DiscosService;
 import pe.edu.cibertec.ProyectoFinalAplWeb1.service.ManageService;
 
 import java.util.Date;
@@ -17,9 +19,14 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/manage")
 public class ManageController {
-
+    
     @Autowired
     ManageService manageService;
+
+    @GetMapping("/home")
+    public String home(Model model) {
+        return "index";
+    }
 
     @GetMapping("/login")
     public String login(Model model) {
@@ -50,7 +57,6 @@ public class ManageController {
 
 
 
-
     @GetMapping("/detail/{id}")
     public String detail(@PathVariable Integer id, Model model) {
         try {
@@ -76,7 +82,6 @@ public class ManageController {
         // Retornar la vista de detalles del usuario
         return "manage_detail";
     }
-
 
 
     @GetMapping("/edit/{id}")
@@ -174,7 +179,67 @@ public class ManageController {
     }
 
 
+    /* /*++++++++++++++++++++++++++++++++++++++++++++/ /*+++++++++++++++++++++++++++++++++++++++++++++++++++/
+                                /*                                   /*
+                                /* metodos para la tienda de discos (usuario) /*
+                                /*                                     */
+    /*++++++++++++++++++++++++++++++++++++++++++++++/  /*+++++++++++++++++++++++++++++++++++++++++++++++++++/ */
+    
+    @GetMapping("/account")
+    public String MyAccount(Model model) {return "myAccount";}
 
+    @GetMapping("/update/{id}")
+    public String update(@PathVariable Integer id, Model model) {
+        try {
+            // Obtener detalles del usuario por ID, utilizando Optional
+            Optional<UserDetailDto> userDetailDtoOpt = manageService.getUserById(id);
 
+            if (userDetailDtoOpt.isPresent()) {
+                // Si el usuario se encuentra, lo añadimos al modelo
+                model.addAttribute("userDetailDto", userDetailDtoOpt.get());
+            } else {
+                // Si no se encuentra el usuario, agregar mensaje de error
+                model.addAttribute("error", "Usuario no encontrado.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("error", "Ocurrió un error al obtener los detalles del usuario.");
+        }
+        return "storeUpdateUser";
+    }
+
+    @PostMapping("/update-confirm")
+    public String updateConfirm(@ModelAttribute UserDetailDto userDetailDto, RedirectAttributes redirectAttributes) {
+        try {
+            // Llamar al servicio para actualizar el usuario
+            boolean success = manageService.updateUser(userDetailDto);
+            if (success) {
+                redirectAttributes.addFlashAttribute("success", "Usuario actualizado exitosamente.");
+            } else {
+                redirectAttributes.addFlashAttribute("error", "No se pudo actualizar el usuario.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("error", "Ocurrió un error al actualizar el usuario.");
+        }
+        return "redirect:/manage/account";  // Redirige después de actualizar
+    }
+
+    @GetMapping("/del/{id}")
+    public String deleteAccount(@PathVariable Integer id, RedirectAttributes redirectAttributes) throws Exception {
+        try {
+            // Llamar al servicio para eliminar al usuario por ID
+            boolean success = manageService.deleteUserById(id);
+            if (success) {
+                redirectAttributes.addFlashAttribute("success", "Usuario eliminado correctamente.");
+            } else {
+                redirectAttributes.addFlashAttribute("error", "Hubo un problema al eliminar el usuario.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("error", "Ocurrió un error al eliminar el usuario.");
+        }
+        return "redirect:/manage/login";  // Redirige al inicio después de eliminar
+    }
 
 }

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Detalle del Disco</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- FontAwesome para iconos -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .container {
+      margin-top: 50px;
+    }
+    .card {
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .icon {
+      color: #0d6efd;
+      margin-right: 8px;
+    }
+    .card img {
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+    <!-- Imagen del Disco -->
+    <img src="URL_DE_LA_IMAGEN_DEL_DISCO" class="card-img-top" alt="Portada del Disco">
+
+    <!-- Contenido del detalle -->
+    <div class="card-body">
+      <!-- Título principal -->
+      <h1 class="text-primary mb-4">
+        <i class="fa-solid fa-compact-disc me-2"></i><span th:text="${disco.nombre}"></span>
+      </h1>
+
+      <!-- Mensaje de error -->
+      <div th:if="${error}" class="alert alert-danger" role="alert">
+        <p th:text="${error}"></p>
+      </div>
+
+      <!-- Detalles del disco -->
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+          <i class="fa-solid fa-user icon"></i><strong>Artista:</strong>
+          <span th:text="${disco.artista}"></span>
+        </li>
+        <li class="list-group-item">
+          <i class="fa-solid fa-building icon"></i><strong>Discográfica:</strong>
+          <span th:text="${disco.discografica}"></span>
+        </li>
+        <li class="list-group-item">
+          <i class="fa-solid fa-calendar icon"></i><strong>Año:</strong>
+          <span th:text="${disco.anio}"></span>
+        </li>
+        <li class="list-group-item">
+          <i class="fa-solid fa-tag icon"></i><strong>Precio:</strong>
+          $<span th:text="${disco.precio}"></span>
+        </li>
+        <li class="list-group-item">
+          <i class="fa-solid fa-music icon"></i><strong>Género:</strong>
+          <span th:text="${disco.genero.nombre}"></span>
+        </li>
+      </ul>
+
+      <!-- Botón de regreso -->
+      <div class="mt-4">
+        <button type="button" class="btn btn-primary mt-3" onclick="location.href='/manage/discos'">
+          <i class="fa-solid fa-arrow-left me-2"></i> Ir a tienda
+        </button>
+        <a href="manage/discos" class="btn btn-primary">
+          <i class="fa-solid fa-arrow-left me-2"></i> Volver
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

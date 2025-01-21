@@ -10,18 +10,16 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig {
+public class SecurityConfig{
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
         http
                 // definir rutas protegidas y quien puede acceder a ellas
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/manage/login").permitAll() // rutas con acceso no autenticado
-                        .requestMatchers("/manage/start").hasAnyRole("ADMIN") // rutas para ADMIN
-                        .requestMatchers("/manage/add").hasAnyRole("ADMIN") // acceso para ADMIN unicamente
-                        .requestMatchers("").hasAnyRole("USER")
+                  .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/manage/home","/manage/login").permitAll()// rutas con acceso no autenticado
+                        .requestMatchers("/manage/**").hasAnyRole("ADMIN", "USER") // rutas para ADMIN
+                                  .requestMatchers("/manage/add").hasAnyRole("ADMIN") // acceso para ADMIN unicamente
                         .anyRequest().authenticated() // Esta línea asegura que cualquier otra solicitud
                                                       // que no haya sido previamente configurada
                                                       // debe requerir autenticación.

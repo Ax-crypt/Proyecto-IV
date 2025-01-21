@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Explora la mejor colección de discos de vinilo en Tienda de Discos. Encuentra tus clásicos favoritos y nuevos lanzamientos.">
+    <meta name="keywords" content="tienda de discos, vinilos, música, comprar discos, vinilo O's">
+    <title>Vinilo Os | Tu tienda de música</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #333;
+            color: #fff;
+        }
+        h1, h2 {
+            font-family: 'Rockwell', sans-serif;
+            margin-top: 10px;
+        }
+        .center-text {
+            text-align: center;
+        }
+        .navbar {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+        .navbar a {
+            color: #fff;
+            font-family: 'Rockwell', sans-serif;
+        }
+        .navbar-brand img {
+            height: 60px;
+            margin-right: 10px;
+        }
+        .content {
+            text-align: center;
+            margin-top: 15%;
+        }
+        .carrusel-container {
+            position: relative;
+            width: 90%;
+            max-width: 1400px;
+            margin: auto;
+            overflow: hidden;
+            margin-top: -90px; /* Subir la imagen */
+        }
+        .carrusel-container img {
+            width: 100%;
+            display: block;
+        }
+        .carrusel-container button {
+            position: absolute;
+            top: 45%; /* Ajustado para que estén más arriba */
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.5);
+            color: wheat;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+        }
+        .carrusel-container button:first-of-type {
+            left: 10px;
+        }
+        .carrusel-container button:last-of-type {
+            right: 10px;
+        }
+        #inicioButtons {
+            display: flex;
+            justify-content: space-around;
+            padding: 2em 0;
+        }
+        #GoToDiscos, #inicioRegistrarme {
+            color: black;
+            font-weight: bold;
+            font-size: 1.2em;
+            border-radius: 5px;
+            padding: 1em 3em;
+            text-decoration: none;
+        }
+        #GoToDiscos {
+            background-color: rgb(255, 156, 118);
+        }
+        #inicioRegistrarme {
+            background-color: lightblue;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark" aria-label="Barra de navegación principal">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">
+            <img th:src="@{/img/logo.png}" alt="Logo Tienda de Discos">
+            Vinilo O's
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <button type="button" class="btn btn-primary mt-3" onclick="location.href='/disk/discos'">
+                    <i class="fa-solid fa-arrow-left me-2"></i> Ir a tienda
+                </button>
+                <li class="nav-item"><a class="nav-link" href="discos">Discos</a></li>
+                <li class="nav-item"><a class="nav-link" href="start">Administar</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="center-text">
+    <h1>Bienvenido a la Tienda de Discos</h1>
+</div>
+<div class="container content">
+    <div class="carrusel-container">
+        <img th:src="@{/img/promotion1.webp}" alt="Promoción 1" />
+    </div>
+    <div>
+        <h1>Vinilo O's</h1>
+        <h2>Tu tienda de discos de Vinilo</h2>
+    </div>
+    <div id="inicioButtons">
+        <a id="GoToDiscos" href="discos">Ver Discos</a>
+        <a id="inicioRegistrarme" href="#registrarse">Registrarse</a>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
