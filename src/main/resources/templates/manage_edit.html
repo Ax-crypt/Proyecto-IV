@@ -109,9 +109,11 @@
     const firstName = document.getElementById("firstName").value.trim();
     const lastName = document.getElementById("lastName").value.trim();
     const email = document.getElementById("email").value.trim();
+    const telephone = document.getElementById("telephone").value.trim();
+    const address = document.getElementById("address").value.trim();
 
     // Validación de campos vacíos
-    if (!firstName || !lastName || !email) {
+    if (!firstName || !lastName || !email || !telephone || !address) {
       alert("Por favor, completa todos los campos antes de continuar.");
       return;
     }

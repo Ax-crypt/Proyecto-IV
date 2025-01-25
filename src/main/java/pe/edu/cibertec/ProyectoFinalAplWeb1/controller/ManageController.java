@@ -137,7 +137,7 @@ public class ManageController {
                 new Date(),
                 new Date()
         ));
-        return "manage-add";  // Asegúrate de tener la vista
+        return "manage-add";
     }
 
 
@@ -184,9 +184,48 @@ public class ManageController {
                                 /* metodos para la tienda de discos (usuario) /*
                                 /*                                     */
     /*++++++++++++++++++++++++++++++++++++++++++++++/  /*+++++++++++++++++++++++++++++++++++++++++++++++++++/ */
-    
-    @GetMapping("/account")
-    public String MyAccount(Model model) {return "myAccount";}
+//    @GetMapping("/account")
+//    public String MyAccount(Model model) {return "myAccount";}
+
+    // Nuevo método para mostrar el formulario para agregar un nuevo usuario
+    @GetMapping("/register")
+    public String register(Model model) {
+        // Establecer valores predeterminados para los campos en lugar de null
+        model.addAttribute("user", new UserCreateDto(
+                "",
+                "",
+                "",
+                "",
+                "",
+                9,
+                "",
+                "USER",
+                new Date(),
+                new Date()
+        ));
+        return "registrarUser";
+    }
+
+
+    // Método para manejar el envío del formulario y agregar el nuevo usuario
+    @PostMapping("/register-confirm")
+    public String registerConfirm(@ModelAttribute UserCreateDto userCreateDto, Model model, RedirectAttributes redirectAttributes) throws Exception {
+        try {
+            // Llamar al servicio para agregar el nuevo usuario
+            boolean success = manageService.addUser(userCreateDto);
+            if (success) {
+                redirectAttributes.addFlashAttribute("success", "Usuario agregado exitosamente.");
+                return "redirect:/manage/home";  // Redirige al inicio después de guardar
+            } else {
+                model.addAttribute("error", "Hubo un problema al agregar el usuario.");
+                return "registrarUser";  // Vuelve al formulario si hubo un error
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("error", "Ocurrió un error al agregar el usuario.");
+            return "registrarUser";  // Vuelve al formulario si hubo un error
+        }
+    }
 
     @GetMapping("/update/{id}")
     public String update(@PathVariable Integer id, Model model) {
@@ -196,7 +235,7 @@ public class ManageController {
 
             if (userDetailDtoOpt.isPresent()) {
                 // Si el usuario se encuentra, lo añadimos al modelo
-                model.addAttribute("userDetailDto", userDetailDtoOpt.get());
+                model.addAttribute("user", userDetailDtoOpt.get());
             } else {
                 // Si no se encuentra el usuario, agregar mensaje de error
                 model.addAttribute("error", "Usuario no encontrado.");
@@ -239,7 +278,7 @@ public class ManageController {
             e.printStackTrace();
             redirectAttributes.addFlashAttribute("error", "Ocurrió un error al eliminar el usuario.");
         }
-        return "redirect:/manage/login";  // Redirige al inicio después de eliminar
+        return "redirect:/manage/home";  // Redirige al inicio después de eliminar
     }
 
 }

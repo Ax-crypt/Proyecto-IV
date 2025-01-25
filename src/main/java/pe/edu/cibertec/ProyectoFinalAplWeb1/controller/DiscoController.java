@@ -148,6 +148,9 @@ public class DiscoController {
                                 /*                                     */
     /*++++++++++++++++++++++++++++++++++++++++++++++/  /*+++++++++++++++++++++++++++++++++++++++++++++++++++/ */
 
+    @GetMapping("/account")
+    public String MyAccount(Model model) {return "myAccount";}
+
     // Mostrar lista de discos
     @GetMapping("/discos")
     public String lisDiscos(Model model) {

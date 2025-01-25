@@ -9,25 +9,62 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         body {
-            background-color: #f8f9fa;
+            background-color: #121212; /* Fondo oscuro */
+            color: #f8f9fa;
         }
         .container {
             margin-top: 50px;
         }
         .card {
+            background-color: #1e1e1e; /* Fondo oscuro para tarjetas */
             border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
         }
         .card img {
+            height: 200px; /* Ajusta la altura de la imagen */
+            object-fit: contain; /* Muestra la imagen completa */
+            background-color: #ffffff; /* Fondo negro para imágenes con espacio vacío */
             border-top-left-radius: 8px;
             border-top-right-radius: 8px;
         }
         .card-title {
             font-family: 'Rockwell', sans-serif;
+            font-size: 2.0rem;
+        }
+        .card-text{
+            font-size: 1.2rem;
+            color: #11ff00;
+        }
+        .navbar a {
+            color: #fff;
+            font-family: 'Rockwell', sans-serif;
+        }
+        .navbar-brand img {
+            height: 60px;
+            margin-right: 10px;
         }
         .navbar-brand {
             font-family: 'Rockwell', sans-serif;
             font-size: 1.5rem;
+        }
+        .navbar .navbar-nav .nav-link {
+            font-size: 18px;
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+        .btn-danger {
+            background-color: #dc3545;
+            border: none;
+        }
+        .btn-danger:hover {
+            background-color: #c82333;
         }
     </style>
 </head>
@@ -37,7 +74,8 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">
-                <i class="fa-solid fa-record-vinyl me-2"></i>Vinil O's
+                <img th:src="@{/img/logo.png}" alt="Logo Tienda de Discos">
+                Vinil O's
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -46,8 +84,8 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="/disk">
-                            <i class="fa-solid fa-record-vinyl me-2"></i>Discos
+                        <a class="nav-link" href="account">
+                            <i class="fas fa-user"></i> Mi cuenta
                         </a>
                     </li>
                     <li class="nav-item">
@@ -62,19 +100,17 @@
         </div>
     </nav>
 
-    <!-- Lista de Discos -->
-    <h1 class="mb-4 text-center"><i class="fa-solid fa-record-vinyl me-2"></i>Lista de Discos</h1>
     <div class="row">
         <!-- Tarjetas de discos -->
-        <div class="col-md-4 mb-4" th:each="disco : ${discos}">
+        <div class="col-md-3 mb-4" th:each="disco : ${discos}">
             <div class="card">
-                <img src="URL_DE_LA_IMAGEN_DEL_DISCO" class="card-img-top" alt="Portada de Disco">
+                <img th:src="@{/img/discos.webp}" class="card-img-top" alt="Portada de Disco">
                 <div class="card-body">
                     <h5 class="card-title" th:text="${disco.nombre}"></h5>
                     <p class="card-text">
                         <strong>Artista:</strong> <span th:text="${disco.artista}"></span><br>
                         <strong>Género:</strong> <span th:text="${disco.genero.nombre}"></span><br>
-                        <strong>Precio:</strong> $<span th:text="${disco.precio}"></span>
+                        <strong>Precio:</strong> S/. <span th:text="${disco.precio}"></span>
                     </p>
                     <a th:href="@{/disk/detail/{id}(id=${disco.id})}" class="btn btn-primary">
                         <i class="fa-solid fa-eye me-1"></i> Ver Detalles
