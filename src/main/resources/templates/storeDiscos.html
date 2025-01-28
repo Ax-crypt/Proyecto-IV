@@ -47,10 +47,13 @@
             font-family: 'Rockwell', sans-serif;
             font-size: 1.5rem;
         }
-        .navbar .navbar-nav .nav-link {
+        .navbar .navbar-nav .btn-success{
             font-size: 18px;
             padding-left: 15px;
             padding-right: 15px;
+        }
+        .navbar-nav .nav-item {
+            margin-right: 20px;  /* Espacio entre los elementos de la lista */
         }
         .btn-primary {
             background-color: #007bff;
@@ -65,6 +68,26 @@
         }
         .btn-danger:hover {
             background-color: #c82333;
+        }
+        .custom-logout-button {
+            background-color: #dc3545; /* Rojo fuerte */
+            color: white; /* Texto blanco */
+            border: none; /* Eliminar borde por defecto */
+            border-radius: 25px; /* Bordes redondeados */
+            padding: 10px 20px; /* Espaciado dentro del botón */
+            font-weight: bold; /* Hacer el texto más notorio */
+            font-size: 16px; /* Aumentar tamaño de la fuente */
+            transition: background-color 0.3s ease, transform 0.2s ease; /* Efecto de transición */
+        }
+
+        .custom-logout-button:hover {
+            background-color: #c82333; /* Cambio de color de fondo cuando pasa el cursor */
+            transform: scale(1.05); /* Agrandar ligeramente el botón al pasar el cursor */
+        }
+
+        .custom-logout-button i {
+            font-size: 18px; /* Aumentar el tamaño del ícono */
+            margin-right: 8px; /* Separación entre el ícono y el texto */
         }
     </style>
 </head>
@@ -84,13 +107,13 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="account">
-                            <i class="fas fa-user"></i> Mi cuenta
-                        </a>
+                        <button type="button" class="btn btn-success ">
+                            <i class="fas fa-user"></i> <strong  th:text="${#authentication.name}"></strong>
+                        </button>
                     </li>
                     <li class="nav-item">
                         <form th:action="@{/manage/logout}" method="post">
-                            <button type="submit" class="btn btn-danger btn-sm">
+                            <button type="submit" class="btn btn-danger btn-sm custom-logout-button">
                                 <i class="fas fa-sign-out-alt"></i> Cerrar sesión
                             </button>
                         </form>

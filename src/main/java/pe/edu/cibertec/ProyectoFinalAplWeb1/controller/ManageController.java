@@ -12,6 +12,7 @@ import pe.edu.cibertec.ProyectoFinalAplWeb1.dto.UserDto;
 import pe.edu.cibertec.ProyectoFinalAplWeb1.service.DiscosService;
 import pe.edu.cibertec.ProyectoFinalAplWeb1.service.ManageService;
 
+import java.security.Principal;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -70,13 +71,13 @@ public class ManageController {
             } else {
                 // Manejar caso cuando no se encuentra el usuario
                 model.addAttribute("error", "No se encontró el usuario con ID: " + id);
-                return "manage_error"; // Vista de error personalizada
+                return "error"; // Vista de error personalizada
             }
         } catch (Exception e) {
             // Manejar cualquier excepción y registrar el error
             e.printStackTrace();
             model.addAttribute("error", "Ocurrió un error al obtener los datos del usuario.");
-            return "manage_error"; // Vista de error personalizada
+            return "error"; // Vista de error personalizada
         }
 
         // Retornar la vista de detalles del usuario
@@ -184,9 +185,6 @@ public class ManageController {
                                 /* metodos para la tienda de discos (usuario) /*
                                 /*                                     */
     /*++++++++++++++++++++++++++++++++++++++++++++++/  /*+++++++++++++++++++++++++++++++++++++++++++++++++++/ */
-//    @GetMapping("/account")
-//    public String MyAccount(Model model) {return "myAccount";}
-
     // Nuevo método para mostrar el formulario para agregar un nuevo usuario
     @GetMapping("/register")
     public String register(Model model) {
@@ -205,7 +203,6 @@ public class ManageController {
         ));
         return "registrarUser";
     }
-
 
     // Método para manejar el envío del formulario y agregar el nuevo usuario
     @PostMapping("/register-confirm")
@@ -227,58 +224,58 @@ public class ManageController {
         }
     }
 
-    @GetMapping("/update/{id}")
-    public String update(@PathVariable Integer id, Model model) {
-        try {
-            // Obtener detalles del usuario por ID, utilizando Optional
-            Optional<UserDetailDto> userDetailDtoOpt = manageService.getUserById(id);
-
-            if (userDetailDtoOpt.isPresent()) {
-                // Si el usuario se encuentra, lo añadimos al modelo
-                model.addAttribute("user", userDetailDtoOpt.get());
-            } else {
-                // Si no se encuentra el usuario, agregar mensaje de error
-                model.addAttribute("error", "Usuario no encontrado.");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            model.addAttribute("error", "Ocurrió un error al obtener los detalles del usuario.");
-        }
-        return "storeUpdateUser";
-    }
-
-    @PostMapping("/update-confirm")
-    public String updateConfirm(@ModelAttribute UserDetailDto userDetailDto, RedirectAttributes redirectAttributes) {
-        try {
-            // Llamar al servicio para actualizar el usuario
-            boolean success = manageService.updateUser(userDetailDto);
-            if (success) {
-                redirectAttributes.addFlashAttribute("success", "Usuario actualizado exitosamente.");
-            } else {
-                redirectAttributes.addFlashAttribute("error", "No se pudo actualizar el usuario.");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            redirectAttributes.addFlashAttribute("error", "Ocurrió un error al actualizar el usuario.");
-        }
-        return "redirect:/manage/account";  // Redirige después de actualizar
-    }
-
-    @GetMapping("/del/{id}")
-    public String deleteAccount(@PathVariable Integer id, RedirectAttributes redirectAttributes) throws Exception {
-        try {
-            // Llamar al servicio para eliminar al usuario por ID
-            boolean success = manageService.deleteUserById(id);
-            if (success) {
-                redirectAttributes.addFlashAttribute("success", "Usuario eliminado correctamente.");
-            } else {
-                redirectAttributes.addFlashAttribute("error", "Hubo un problema al eliminar el usuario.");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            redirectAttributes.addFlashAttribute("error", "Ocurrió un error al eliminar el usuario.");
-        }
-        return "redirect:/manage/home";  // Redirige al inicio después de eliminar
-    }
+//    @GetMapping("/update/{id}")
+//    public String update(@PathVariable Integer id, Model model) {
+//        try {
+//            // Obtener detalles del usuario por ID, utilizando Optional
+//            Optional<UserDetailDto> userDetailDtoOpt = manageService.getUserById(id);
+//
+//            if (userDetailDtoOpt.isPresent()) {
+//                // Si el usuario se encuentra, lo añadimos al modelo
+//                model.addAttribute("user", userDetailDtoOpt.get());
+//            } else {
+//                // Si no se encuentra el usuario, agregar mensaje de error
+//                model.addAttribute("error", "Usuario no encontrado.");
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            model.addAttribute("error", "Ocurrió un error al obtener los detalles del usuario.");
+//        }
+//        return "storeUpdateUser";
+//    }
+//
+//    @PostMapping("/update-confirm")
+//    public String updateConfirm(@ModelAttribute UserDetailDto userDetailDto, RedirectAttributes redirectAttributes) {
+//        try {
+//            // Llamar al servicio para actualizar el usuario
+//            boolean success = manageService.updateUser(userDetailDto);
+//            if (success) {
+//                redirectAttributes.addFlashAttribute("success", "Usuario actualizado exitosamente.");
+//            } else {
+//                redirectAttributes.addFlashAttribute("error", "No se pudo actualizar el usuario.");
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            redirectAttributes.addFlashAttribute("error", "Ocurrió un error al actualizar el usuario.");
+//        }
+//        return "redirect:/manage/account";  // Redirige después de actualizar
+//    }
+//
+//    @GetMapping("/del/{id}")
+//    public String deleteAccount(@PathVariable Integer id, RedirectAttributes redirectAttributes) throws Exception {
+//        try {
+//            // Llamar al servicio para eliminar al usuario por ID
+//            boolean success = manageService.deleteUserById(id);
+//            if (success) {
+//                redirectAttributes.addFlashAttribute("success", "Usuario eliminado correctamente.");
+//            } else {
+//                redirectAttributes.addFlashAttribute("error", "Hubo un problema al eliminar el usuario.");
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            redirectAttributes.addFlashAttribute("error", "Ocurrió un error al eliminar el usuario.");
+//        }
+//        return "redirect:/manage/home";  // Redirige al inicio después de eliminar
+//    }
 
 }

@@ -19,7 +19,7 @@ public class SecurityConfig{
                   .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/manage/home","/manage/login", "/manage/register","/manage/register-confirm","/img/**").permitAll()// rutas con acceso no autenticado
                         .requestMatchers("/manage/**").hasAnyRole("ADMIN", "USER") // rutas para ADMIN
-                                  .requestMatchers("/manage/add").hasAnyRole("ADMIN") // acceso para ADMIN unicamente
+                        .requestMatchers("/manage/add").hasAnyRole("ADMIN") // acceso para ADMIN unicamente
                         .anyRequest().authenticated() // Esta línea asegura que cualquier otra solicitud
                                                       // que no haya sido previamente configurada
                                                       // debe requerir autenticación.

@@ -7,38 +7,91 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- FontAwesome para iconos -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-
     <style>
-        /* Estilos personalizados para el botón de Cerrar sesión */
-        .custom-logout-button {
-            background-color: #dc3545; /* Rojo fuerte */
-            color: white; /* Texto blanco */
-            border: none; /* Eliminar borde por defecto */
-            border-radius: 25px; /* Bordes redondeados */
-            padding: 10px 20px; /* Espaciado dentro del botón */
-            font-weight: bold; /* Hacer el texto más notorio */
-            font-size: 16px; /* Aumentar tamaño de la fuente */
-            transition: background-color 0.3s ease, transform 0.2s ease; /* Efecto de transición */
+        body {
+            background-color: #121212;
+        }
+        .error-container {
+            text-align: center;
+            margin-top: 50px;
+        }
+        .error-image {
+            max-width: 100%;
+            height: auto;
+            max-height: 400px;
+            opacity: 0.9;
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out, box-shadow 0.5s ease-in-out;
+            border: none;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.58);
+            border-radius: 12px;
         }
 
-        .custom-logout-button:hover {
-            background-color: #c82333; /* Cambio de color de fondo cuando pasa el cursor */
-            transform: scale(1.05); /* Agrandar ligeramente el botón al pasar el cursor */
+        .error-image:hover {
+            opacity: 1;
+            transform: scale(1.05);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.58);
         }
-
-        .custom-logout-button {
-            font-size: 18px; /* Aumentar el tamaño del ícono */
-            margin-right: 8px; /* Separación entre el ícono y el texto */
+        .alert {
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: all 0.5s ease-in-out;
+        }
+        .alert.show {
+            opacity: 1;
+            transform: translateY(0);
         }
     </style>
 </head>
 <body>
-<div class="container">
+<div class="container error-container">
     <div class="row">
-        <h1> Lo sentimos, No hemos podido mostrar lo que buscabas</h1>
+        <div class="col-12">
+            <h1 class="text-danger">Lo sentimos, no hemos podido mostrar lo que buscabas</h1>
+        </div>
+    </div>
+    <div class="row my-4">
+        <div class="col-12">
+            <img th:src="@{/img/errorDisk.png}" alt="imagen error" class="error-image" id="errorImage">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <!-- Mostrar el mensaje de error -->
+            <div th:if="${error}" class="alert alert-danger d-flex align-items-center" role="alert" id="errorAlert">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                <span th:text="${error}"></span>
+                <button type="button" class="btn-close ms-auto" aria-label="Close" id="closeAlert"></button>
+            </div>
+        </div>
     </div>
 </div>
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Cuando el DOM está completamente cargado
+    document.addEventListener("DOMContentLoaded", function () {
+        const errorImage = document.getElementById("errorImage");
+        const errorAlert = document.getElementById("errorAlert");
+        const closeAlert = document.getElementById("closeAlert");
+
+        // Animar la imagen al cargar
+        errorImage.onload = () => {
+            errorImage.classList.add("loaded");
+        };
+
+        // Mostrar la alerta con animación
+        setTimeout(() => {
+            errorAlert.classList.add("show");
+        }, 300); // Retraso de 300ms
+
+        // Cerrar la alerta al hacer clic en el botón de cerrar
+        closeAlert.addEventListener("click", () => {
+            errorAlert.classList.remove("show");
+            setTimeout(() => {
+                errorAlert.style.display = "none";
+            }, 500); // Esperar a que termine la animación
+        });
+    });
+</script>
 </body>
 </html>
