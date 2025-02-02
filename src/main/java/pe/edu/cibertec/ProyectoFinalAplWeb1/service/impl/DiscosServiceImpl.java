@@ -19,9 +19,6 @@ public class DiscosServiceImpl implements DiscosService {
     @Autowired
     DiscoRepository discoRepository;
 
-    @Autowired
-    GenderRepository genreRepository;
-
     @Override
     public List<DiscoDto> getAllDiscos() throws Exception {
         List<DiscoDto> discos = new ArrayList<DiscoDto>();

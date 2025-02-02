@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/manage-discos")
+@RequestMapping("/disks")
 public class DiscosApi {
 
     @Autowired
@@ -45,7 +45,7 @@ public FindDiscosResponse findDiscos(@RequestParam(value = "id", defaultValue = 
     }
 }
 
-@GetMapping("/details-discos")
+@GetMapping("/details")
 public FindDiscosResponse findDiscosById(@RequestParam(value = "id", defaultValue = "0") String id) {
 
     try {
@@ -68,7 +68,7 @@ public FindDiscosResponse findDiscosById(@RequestParam(value = "id", defaultValu
     }
 }
 
-@PostMapping("/update-discos")
+@PostMapping("/update")
 public UpdateDiscosResponse updateDisco(@RequestBody DiscoDto updateDisco) {
     try {
         if (discosService.updateDisco(updateDisco)) {
@@ -84,7 +84,7 @@ public UpdateDiscosResponse updateDisco(@RequestBody DiscoDto updateDisco) {
     }
 
 }
-@PostMapping("/add-discos")
+@PostMapping("/add")
 public AddDiscosResponse addDisco(@RequestBody DiskDto discos) {
     try {
         if (discosService.addDisco(discos)) {
@@ -98,7 +98,7 @@ public AddDiscosResponse addDisco(@RequestBody DiskDto discos) {
     }
 }
 
-@DeleteMapping("/delete-discos")
+@DeleteMapping("/delete")
 public DeleteDiscosResponse deleteDisco(@RequestParam(value = "id", required = true) int id){
     try {
         if (discosService.deleteDiscoById(id)) {

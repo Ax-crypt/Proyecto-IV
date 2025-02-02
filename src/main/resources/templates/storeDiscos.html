@@ -89,6 +89,20 @@
             font-size: 18px; /* Aumentar el tamaño del ícono */
             margin-right: 8px; /* Separación entre el ícono y el texto */
         }
+        #details-price {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #11ff00;
+        }
+        .details-comprar {
+            border: none;
+            background-color: #00ff00;
+            color: black;
+            padding: 5px 5px;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -107,6 +121,12 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
+                        <a class="nav-link" href="ver">
+                            <i class="fas fa-shopping-cart"></i>
+                            <strong th:text="${cantidadCarrito}"></strong>
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <button type="button" class="btn btn-success ">
                             <i class="fas fa-user"></i> <strong  th:text="${#authentication.name}"></strong>
                         </button>
@@ -122,7 +142,7 @@
             </div>
         </div>
     </nav>
-
+                
     <div class="row">
         <!-- Tarjetas de discos -->
         <div class="col-md-3 mb-4" th:each="disco : ${discos}">
@@ -133,7 +153,12 @@
                     <p class="card-text">
                         <strong>Artista:</strong> <span th:text="${disco.artista}"></span><br>
                         <strong>Género:</strong> <span th:text="${disco.genero.nombre}"></span><br>
-                        <strong>Precio:</strong> S/. <span th:text="${disco.precio}"></span>
+                        <strong>Precio:</strong> <span id="details-price">S/. <span th:text="${disco.precio}"></span></span>
+                    <form th:action="@{/disk/agregar/{id}(id=${disco.id})}" method="post">
+                    <button type="submit" class="details-comprar">
+                        <i class="fas fa-cart-plus fa-2x"></i>Añadir
+                    </button>
+                    </form>
                     </p>
                     <a th:href="@{/disk/detail/{id}(id=${disco.id})}" class="btn btn-primary">
                         <i class="fa-solid fa-eye me-1"></i> Ver Detalles

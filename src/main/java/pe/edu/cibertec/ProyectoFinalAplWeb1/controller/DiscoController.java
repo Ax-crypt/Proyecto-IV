@@ -4,11 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pe.edu.cibertec.ProyectoFinalAplWeb1.dto.DiscoDto;
 import pe.edu.cibertec.ProyectoFinalAplWeb1.dto.DiskDto;
 import pe.edu.cibertec.ProyectoFinalAplWeb1.entity.Genero;
 import pe.edu.cibertec.ProyectoFinalAplWeb1.repository.GenderRepository;
 import pe.edu.cibertec.ProyectoFinalAplWeb1.service.DiscosService;
+import pe.edu.cibertec.ProyectoFinalAplWeb1.service.impl.CarService;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,6 +23,9 @@ public class DiscoController {
 
     @Autowired
     private GenderRepository genderRepository;
+
+    @Autowired
+    CarService carService;
 
     // Método para listar todos los discos
     @GetMapping
@@ -154,6 +159,7 @@ public class DiscoController {
         try {
             List<DiscoDto> discos = discosService.getAllDiscos();
             model.addAttribute("discos", discos);
+            model.addAttribute("cantidadCarrito", carService.getCantidadTotal());
             return "storeDiscos";
         } catch (Exception e) {
             e.printStackTrace();
@@ -182,6 +188,53 @@ public class DiscoController {
         }
     }
 
+
+    // Método para carrito
+    @PostMapping("/agregar/{id}")
+    public String agregarDiscoAlCarrito(@PathVariable int id, RedirectAttributes redirectAttributes) {
+        try {
+            Optional<DiscoDto> disco = discosService.getDiscoById(id);
+            if (disco.isPresent()) {
+                carService.agregarDisco(disco.get());
+                redirectAttributes.addFlashAttribute("mensaje", "Disco agregado al carrito");
+            } else {
+                redirectAttributes.addFlashAttribute("error", "Disco no encontrado");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("error", "Error al agregar el disco al carrito");
+        }
+        return "redirect:/disk/discos";
+    }
+
+    @GetMapping("/ver")
+    public String verCarrito(Model model) {
+        model.addAttribute("items", carService.getItems());
+        model.addAttribute("cantidadTotal", carService.getCantidadTotal());
+        model.addAttribute("totalPagar", carService.getTotalPagar());
+        return "car";
+    }
+
+    @PostMapping("/eliminar/{id}")
+    public String eliminarDiscoDelCarrito(@PathVariable int id, RedirectAttributes redirectAttributes) {
+        carService.eliminarDisco(id);
+        redirectAttributes.addFlashAttribute("mensaje", "Disco eliminado del carrito");
+        return "redirect:/disk/ver";
+    }
+
+    @PostMapping("/actualizar/{id}")
+    public String actualizarCantidad(@PathVariable int id, @RequestParam int cantidad, RedirectAttributes redirectAttributes) {
+        carService.actualizarCantidad(id, cantidad);
+        redirectAttributes.addFlashAttribute("mensaje", "Cantidad actualizada");
+        return "redirect:/disk/ver";
+    }
+
+    @PostMapping("/vaciar")
+    public String vaciarCarrito(RedirectAttributes redirectAttributes) {
+        carService.vaciarCarrito();
+        redirectAttributes.addFlashAttribute("mensaje", "Carrito vaciado");
+        return "redirect:/disk/ver";
+    }
 
 }
 

@@ -99,12 +99,14 @@
     <div>
       <p> <i class="fa-solid fa-tag icon"></i><strong> Precio:</strong> <span id="details-price">S/. <span th:text="${disco.precio}"></span></span></p>
     </div>
-    <input type="button" class="details-comprar"  value="Añadir al carrito">
+    <form th:action="@{/disk/agregar/{id}(id=${disco.id})}" method="post">
+      <input type="submit" class="details-comprar" value="Añadir al carrito">
+    </form>
   </div>
 
   <!-- Botón Volver -->
   <button type="button" class="btn btn-primary btn-volver" onclick="location.href='/disk/discos'">
-    <i class="fa-solid fa-arrow-left me-2"></i> Volver
+    <i class="fas fa-shopping-cart"></i> Seguir Comprando
   </button>
 </div>
 
