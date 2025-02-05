@@ -98,7 +98,7 @@ public class ManageController {
             e.printStackTrace();
             model.addAttribute("error", "Ocurrió un error al obtener los detalles del usuario.");
         }
-        return "manage_edit";  // Asegúrate de tener la vista manage_edit.html
+        return "manage_edit";
     }
 
     @PostMapping("/edit-confirm")
@@ -219,6 +219,82 @@ public class ManageController {
         }
     }
 
+    // Método para mostrar el formulario de edición de usuario
+    @GetMapping("/update/{id}")
+    public String update(@PathVariable Integer id, Model model) {
+        try {
+            // Obtener detalles del usuario por ID, utilizando Optional
+            Optional<UserDetailDto> userDetailDtoOpt = manageService.getUserById(id);
 
+            if (userDetailDtoOpt.isPresent()) {
+                // Si el usuario se encuentra, lo añadimos al modelo
+                model.addAttribute("userDetailDto", userDetailDtoOpt.get());
+            } else {
+                // Si no se encuentra el usuario, agregar mensaje de error
+                model.addAttribute("error", "Usuario no encontrado.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("error", "Ocurrió un error al obtener los detalles del usuario.");
+        }
+        return "updateUser";  // Vista de edición de usuario
+    }
 
+    // Método para procesar la actualización de datos del usuario
+    @PostMapping("/update-confirm")
+    public String updateConfirm(@ModelAttribute UserDetailDto userDetailDto, RedirectAttributes redirectAttributes) {
+        try {
+            // Llamar al servicio para actualizar el usuario
+            boolean success = manageService.updateUser(userDetailDto);
+            if (success) {
+                redirectAttributes.addFlashAttribute("success", "Usuario actualizado exitosamente.");
+            } else {
+                redirectAttributes.addFlashAttribute("error", "No se pudo actualizar el usuario.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("error", "Ocurrió un error al actualizar el usuario.");
+        }
+        return "redirect:/manage/account";  // Redirige a la vista de la cuenta después de actualizar
+    }
+
+    // Método para mostrar la vista de la cuenta del usuario
+    @GetMapping("/account")
+    public String cuenta(Model model, Principal principal) {
+        try {
+            // Obtener el nombre de usuario autenticado
+            String username = principal.getName();
+
+            // Obtener el ID del usuario autenticado
+            Optional<UserDetailDto> userOptional = manageService.getUserByUsername(username);
+            if (userOptional.isPresent()) {
+                int userId = userOptional.get().id(); // Obtener el ID del usuario
+
+                // Obtener los datos del usuario por su ID
+                Optional<UserDetailDto> userByIdOptional = manageService.getUserById(userId);
+                if (userByIdOptional.isPresent()) {
+                    UserDetailDto user = userByIdOptional.get();
+                    model.addAttribute("user", user);
+                    model.addAttribute("userId", user.id()); // Pasar el ID del usuario a la vista
+                } else {
+                    model.addAttribute("error", "Usuario no encontrado.");
+                }
+            } else {
+                model.addAttribute("error", "Usuario no encontrado.");
+            }
+
+//            // Obtener las compras del usuario (esto depende de tu implementación)
+//            List<CompraDto> compras = manageService.getComprasByUsuario(username);
+//            model.addAttribute("compras", compras);
+//
+//            // Agregar la cantidad de productos en el carrito
+//            model.addAttribute("cantidadCarrito", carrito.getCantidadTotal());
+
+            return "cuenta";
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("error", "Error al cargar la cuenta del usuario.");
+            return "error";
+        }
+    }
 }

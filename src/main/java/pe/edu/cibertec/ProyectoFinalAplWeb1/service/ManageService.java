@@ -13,5 +13,5 @@ public interface ManageService {
     boolean updateUser(UserDetailDto userDto) throws Exception;
     boolean addUser(UserCreateDto userCreateDto) throws Exception;
     boolean deleteUserById(int id) throws Exception;
-
+    Optional<UserDetailDto> getUserByUsername(String username) throws Exception;
 }

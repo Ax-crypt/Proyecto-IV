@@ -83,6 +83,23 @@ public class ManageServiceImpl implements ManageService {
 
     }
 
+    //obtener datos de usuario autenticado
+    @Override
+    public Optional<UserDetailDto> getUserByUsername(String username) throws Exception {
+        Optional<User> optional = userRepository.findByUsername(username);
+        return optional.map(user -> new UserDetailDto(user.getId(),
+                user.getUsername(),
+                user.getPassword(),
+                user.getEmail(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getTelephone(),
+                user.getAddress(),
+                user.getRole(),
+                user.getCreatedAt(),
+                user.getUpdatedAt()));
+    }
+
     @Autowired
     private PasswordEncoder passwordEncoder;
 
