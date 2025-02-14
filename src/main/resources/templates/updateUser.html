@@ -15,6 +15,11 @@
     .container {
       margin-top: 50px;
     }
+    h2 {
+      color: #00ff00; /* Verde brillante para el título */
+      text-align: center;
+      margin-bottom: 20px;
+    }
     .card {
       background-color: #1e1e1e; /* Fondo oscuro para tarjetas */
       border-radius: 8px;
@@ -40,49 +45,20 @@
     .btn-primary:hover {
       background-color: #0056b3;
     }
+    .btn-container {
+      display: flex;
+      justify-content: center;
+      gap: 20px; /* Espaciado entre botones */
+      margin-top: 20px;
+    }
   </style>
 </head>
 <body>
 <div class="container">
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="#">
-        <img th:src="@{/img/logo.png}" alt="Logo Tienda de Discos">
-        Vinil O's
-      </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-              aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="ver">
-              <i class="fas fa-shopping-cart"></i>
-              <strong th:text="${cantidadCarrito}"></strong>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a th:href="@{/manage/cuenta}" class="btn btn-success">
-              <i class="fas fa-user"></i> <strong th:text="${#authentication.name}"></strong>
-            </a>
-          </li>
-          <li class="nav-item">
-            <form th:action="@{/manage/logout}" method="post">
-              <button type="submit" class="btn btn-danger btn-sm custom-logout-button">
-                <i class="fas fa-sign-out-alt"></i> Cerrar sesión
-              </button>
-            </form>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-
   <!-- Contenido de edición de usuario -->
   <div class="card">
-    <h2>Editar Usuario</h2>
+    <h2>Actualizar Datos</h2>
+
     <form th:action="@{/manage/update-confirm}" method="post" th:object="${userDetailDto}">
       <!-- Campo oculto para el ID del usuario -->
       <input type="hidden" th:field="*{id}" />
@@ -107,7 +83,14 @@
         <label for="address" class="form-label">Dirección</label>
         <input type="text" class="form-control" id="address" th:field="*{address}" required>
       </div>
-      <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+      <div class="btn-container">
+        <a href="/manage/account" class="btn btn-secondary btn-lg">
+          <i class="fas fa-arrow-left"></i> Regresar a Cuenta
+        </a>
+        <button type="submit" class="btn btn-primary btn-lg">
+          <i class="fas fa-save"></i> Guardar Cambios
+        </button>
+      </div>
     </form>
   </div>
 </div>

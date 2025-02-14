@@ -5,14 +5,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import pe.edu.cibertec.ProyectoFinalAplWeb1.dto.DiscoDto;
-import pe.edu.cibertec.ProyectoFinalAplWeb1.dto.UserCreateDto;
-import pe.edu.cibertec.ProyectoFinalAplWeb1.dto.UserDetailDto;
-import pe.edu.cibertec.ProyectoFinalAplWeb1.dto.UserDto;
+import pe.edu.cibertec.ProyectoFinalAplWeb1.dto.*;
+import pe.edu.cibertec.ProyectoFinalAplWeb1.entity.Buys;
+import pe.edu.cibertec.ProyectoFinalAplWeb1.repository.BuysRepository;
+import pe.edu.cibertec.ProyectoFinalAplWeb1.service.BuysService;
 import pe.edu.cibertec.ProyectoFinalAplWeb1.service.DiscosService;
 import pe.edu.cibertec.ProyectoFinalAplWeb1.service.ManageService;
+import pe.edu.cibertec.ProyectoFinalAplWeb1.service.impl.CarService;
 
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -23,6 +25,9 @@ public class ManageController {
     
     @Autowired
     ManageService manageService;
+
+    @Autowired
+    private BuysService buysService;
 
     @GetMapping("/home")
     public String home(Model model) {
@@ -282,14 +287,6 @@ public class ManageController {
             } else {
                 model.addAttribute("error", "Usuario no encontrado.");
             }
-
-//            // Obtener las compras del usuario (esto depende de tu implementación)
-//            List<CompraDto> compras = manageService.getComprasByUsuario(username);
-//            model.addAttribute("compras", compras);
-//
-//            // Agregar la cantidad de productos en el carrito
-//            model.addAttribute("cantidadCarrito", carrito.getCantidadTotal());
-
             return "cuenta";
         } catch (Exception e) {
             e.printStackTrace();
@@ -297,4 +294,28 @@ public class ManageController {
             return "error";
         }
     }
+
+    @GetMapping("/account/purchases")
+    public String verCompras(Model model, Principal principal) {
+        try {
+            String username = principal.getName();
+            Optional<UserDetailDto> userOptional = manageService.getUserByUsername(username);
+
+            if (userOptional.isPresent()) {
+                UserDetailDto user = userOptional.get();
+                List<BuysDto> compras = buysService.findByUser(user);
+
+                model.addAttribute("compras", compras); // Pasamos la lista de compras a la vista
+                model.addAttribute("user", user);
+                return "misCompras";
+            } else {
+                model.addAttribute("error", "Usuario no encontrado.");
+                return "error";
+            }
+        } catch (Exception e) {
+            model.addAttribute("error", "Error al obtener las compras.");
+            return "error";
+        }
+    }
+
 }

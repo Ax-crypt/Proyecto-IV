@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Mis Compras</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: rgb(1, 1, 16);
+      color: white;
+      font-family: Arial, sans-serif;
+    }
+    h1 {
+      font-family: 'Rockwell', sans-serif;
+      font-size: 3.5rem;
+      color: #11ff00;
+    }
+    .compras-container {
+      padding: 2em;
+    }
+    .compra-item {
+      background-color: #252525;
+      border-radius: 12px;
+      padding: 1em;
+      margin-bottom: 1em;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    }
+    .compra-item h2 {
+      font-size: 1.5em;
+    }
+    .compra-item .total {
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #00ff00;
+    }
+    h3{
+      margin-top: 60px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container compras-container">
+  <h1>Mis Compras</h1>
+
+  <div th:if="${compras.isEmpty()}">
+    <p>No tienes compras registradas.</p>
+  </div>
+
+  <div th:each="compra : ${compras}" class="compra-item">
+    <h2>Compra #<span th:text="${compra.id}"></span></h2>
+    <p><strong>Fecha:</strong> <span th:text="${compra.fecha}"></span></p>
+    <p><strong>Total Pagado:</strong> <span class="total">S/. <span th:text="${compra.total}"></span></span></p>
+  </div>
+
+  <h3>
+    <a th:href="@{/disk/discos}" class="text-light text-decoration-none">
+      <i class="fas fa-store me-2"></i>Ir a Tienda
+    </a>
+  </h3>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -37,12 +37,14 @@
             <label for="nombre" class="form-label">Nombre</label>
             <input type="text" class="form-control" id="nombre" th:field="*{nombre}" required>
         </div>
+        <div class="mb-3 row">
+            <label for="btnActualizar" class="col-sm-2"></label>
+            <div class="col-sm-9">
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#confirmModal"  id="btnActualizar" >Actualizar Disco</button>
-        <!-- Botón de regreso -->
-        <div class="mt-4">
             <a href="/disk" class="btn btn-primary">
                 <i class="fa-solid fa-arrow-left me-2"></i> Volver
             </a>
+            </div>
         </div>
     </form>
 

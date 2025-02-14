@@ -5,13 +5,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import pe.edu.cibertec.ProyectoFinalAplWeb1.dto.DiscoDto;
-import pe.edu.cibertec.ProyectoFinalAplWeb1.dto.DiskDto;
+import pe.edu.cibertec.ProyectoFinalAplWeb1.dto.*;
+import pe.edu.cibertec.ProyectoFinalAplWeb1.entity.Buys;
 import pe.edu.cibertec.ProyectoFinalAplWeb1.entity.Genero;
 import pe.edu.cibertec.ProyectoFinalAplWeb1.repository.GenderRepository;
+import pe.edu.cibertec.ProyectoFinalAplWeb1.service.BuysService;
 import pe.edu.cibertec.ProyectoFinalAplWeb1.service.DiscosService;
+import pe.edu.cibertec.ProyectoFinalAplWeb1.service.ManageService;
 import pe.edu.cibertec.ProyectoFinalAplWeb1.service.impl.CarService;
 
+import java.security.Principal;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,7 +30,13 @@ public class DiscoController {
     private GenderRepository genderRepository;
 
     @Autowired
-    CarService carService;
+    private CarService carService;
+
+    @Autowired
+    private BuysService buysService;
+
+    @Autowired
+    private ManageService manageService;
 
     // Método para listar todos los discos
     @GetMapping
@@ -233,6 +244,48 @@ public class DiscoController {
     public String vaciarCarrito(RedirectAttributes redirectAttributes) {
         carService.vaciarCarrito();
         redirectAttributes.addFlashAttribute("mensaje", "Carrito vaciado");
+        return "redirect:/disk/ver";
+    }
+
+    @GetMapping("/payment")
+    public String mostrarFormularioPago() {
+        return "pago";
+    }
+
+    @PostMapping("/payment/process")
+    public String procesarPago(Principal principal, RedirectAttributes redirectAttributes) {
+        try {
+            String username = principal.getName();
+            Optional<UserDetailDto> userOptional = manageService.getUserByUsername(username);
+
+            if (userOptional.isPresent()) {
+                UserDetailDto userDetail = userOptional.get();
+                UserDto user = new UserDto(
+                        userDetail.id(),
+                        userDetail.firstName(),
+                        userDetail.lastName(),
+                        userDetail.email(),
+                        userDetail.telephone(),
+                        userDetail.address()
+                );
+
+                double totalPagar = carService.getTotalPagar();
+
+                // Guardar la compra usando DTO
+                BuysDto nuevaCompra = new BuysDto(null, user, new Date(), totalPagar);
+
+                buysService.save(nuevaCompra); // Este método debe guardar la compra en la base de datos
+
+                // Vaciar el carrito
+                carService.vaciarCarrito();
+
+                // Mensaje con Alertify
+                redirectAttributes.addFlashAttribute("compraExitosa", true);
+                return "redirect:/disk/discos";
+            }
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Error al procesar el pago");
+        }
         return "redirect:/disk/ver";
     }
 

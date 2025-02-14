@@ -3,96 +3,133 @@
 <head>
     <meta charset="UTF-8">
     <title>Carrito de Compras</title>
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- FontAwesome para iconos -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Alertify CSS -->
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"/>
+    <!-- Alertify Default Theme -->
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css"/>
+
     <style>
         body {
-            background-color: rgb(1, 1, 16);
+            background-color: #000;
             color: white;
-            font-family: Arial, sans-serif;
+            font-family: "Roboto", sans-serif;
         }
-        h1 {
-            font-family: 'Rockwell', sans-serif;
-            font-size: 3.5rem;
+        .title{
+            color: #11ff00;
         }
         .carrito-container {
             padding: 2em;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         .carrito-item {
-            background-color: #252525;
+            background-color: #151515;
             border-radius: 12px;
-            padding: 1em;
+            padding: 1.5em;
             margin-bottom: 1em;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            width: 80%;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 1.5em;
         }
-        .carrito-item h2 {
-            font-size: 1.5em;
+        .carrito-item img {
+            width: 100px;
+            border-radius: 8px;
         }
-        .carrito-item p {
-            margin: 0.5em 0;
+        .carrito-item .info {
+            flex: 1;
         }
-        .carrito-item .precio {
+        .precio {
             font-size: 1.2em;
             font-weight: bold;
-            color: #00ff00;
-        }
-        .btn-eliminar {
-            background-color: #ff0000;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .btn-vaciar {
-            background-color: #ff0000;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1.2em;
+            color: #1b3cfb;
         }
         .cantidad-input {
             width: 60px;
             text-align: center;
         }
+        .btn-eliminar {
+            background-color: #ff0000;
+            color: white;
+            border: none;
+            padding: 7px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .btn-success{
+            margin-top: 10px;
+        }
+        .btn-danger{
+            margin: 70px 0 10px 0;
+
+        }
+        .car{
+            color: #1e40f4;
+            font-size: 3.8rem;
+        }
     </style>
 </head>
 <body>
 <div class="carrito-container">
-    <h1>Carrito de Compras</h1>
+    <h1 class="title">Carrito de Compras</h1>
+
+    <div th:if="${items.isEmpty()}">
+        <p class="car">Aun no has agregado ningun producto.</p>
+    </div>
+
     <div th:each="item : ${items}" class="carrito-item">
-        <h2 th:text="${item.key.nombre}"></h2>
-        <p><strong>Artista:</strong> <span th:text="${item.key.artista}"></span></p>
-        <p><strong>Precio unitario:</strong> <span class="precio">S/. <span th:text="${item.key.precio}"></span></span></p>
-        <p><strong>Cantidad:</strong></p>
-        <form th:action="@{/disk/actualizar/{id}(id=${item.key.id})}" method="post">
-            <input type="number" name="cantidad" th:value="${item.value}" class="cantidad-input" min="1">
-            <input type="submit" value="Actualizar" class="btn btn-primary">
-        </form>
-        <p><strong>Subtotal:</strong> <span class="precio">S/. <span th:text="${item.key.precio * item.value}"></span></span></p>
+        <img th:src="@{/img/discos.webp(id=${item.key.id})}" alt="albumCover">
+        <div class="info">
+            <h2 th:text="${item.key.nombre}"></h2>
+            <p><strong>Artista:</strong> <span th:text="${item.key.artista}"></span></p>
+            <p><strong>Precio unitario:</strong> <span class="precio">S/. <span th:text="${item.key.precio}"></span></span></p>
+            <p><strong>Cantidad:</strong></p>
+            <form th:action="@{/disk/actualizar/{id}(id=${item.key.id})}" method="post">
+                <input type="number" name="cantidad" th:value="${item.value}" class="cantidad-input" min="1">
+                <input type="submit" value="Actualizar" class="btn btn-primary">
+            </form>
+            <p><strong>Subtotal:</strong> <span class="precio">S/. <span th:text="${item.key.precio * item.value}"></span></span></p>
+        </div>
         <form th:action="@{/disk/eliminar/{id}(id=${item.key.id})}" method="post">
-            <input type="submit" class="btn-eliminar" value="Eliminar">
+            <button type="submit" class=" btn-eliminar">
+                <i class="fas fa-trash-alt"></i> Eliminar
+            </button>
         </form>
     </div>
     <div class="total-section">
-        <h3><strong>Total de productos:</strong> <span th:text="${cantidadTotal}"></span></h3>
-        <h3><strong>Total a pagar:</strong> <span class="precio">S/. <span th:text="${totalPagar}"></span></span></h3>
+        <h5><strong>Total de productos:</strong> <span th:text="${cantidadTotal}"></span></h5>
+        <h2><strong>Total a pagar:</strong> <span class="precio">S/. <span th:text="${totalPagar}"></span></span></h2>
     </div>
-    <form th:action="@{/disk/vaciar}" method="post">
-        <input type="submit" class="btn-vaciar" value="Vaciar Carrito">
+    <form th:action="@{/disk/payment}" method="get">
+        <button type="submit" class="btn btn-success btn-xl px-5 py-3 fw-bold rounded-pill">
+            <i class="fas fa-credit-card fa-2x"></i> Pagar
+        </button>
     </form>
-    <!-- Botón Volver -->
-    <button type="button" class="btn btn-primary btn-volver" onclick="location.href='/disk/discos'">
-        <i class="fas fa-shopping-cart"></i> <i class="fas fa-arrow-right"></i>
-        Seguir Comprando
-    </button>
-</div>
+    <!-- Sección de acciones del carrito -->
+    <div class="text-center mt-4">
+        <form th:action="@{/disk/vaciar}" method="post" class="mb-3">
+            <button type="submit" class="btn btn-danger btn-lg px-4 py-2">
+                <i class="fas fa-trash-alt"></i> Vaciar Carrito
+            </button>
+        </form>
 
-<!-- Bootstrap JS -->
+        <button type="button" class="btn btn-primary btn-lg px-4 py-2" onclick="location.href='/disk/discos'">
+            <i class="fas fa-shopping-cart"></i> <i class="fas fa-arrow-right"></i> Seguir Comprando
+        </button>
+    </div>
+
+</div>
+<!-- Alertify JS -->
+<script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+<script th:if="${mensaje}">
+    alertify.success("[[${mensaje}]]");
+</script>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
